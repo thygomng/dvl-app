@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +40,8 @@ public class SkillService implements MxFilterableBeanService<SkillBean, Long> {
 	@Override
 	@GetMapping
 	public Iterable<SkillBean> get(@RequestParam Map<String, String> params) {
-		return repo.firstPage();
+		Sort sort = new Sort(Sort.Direction.ASC, "name");
+		return repo.firstPage(sort);
 	}
 
 	@Override
@@ -79,12 +81,23 @@ public class SkillService implements MxFilterableBeanService<SkillBean, Long> {
 	}
 
 	@GetMapping("/like")
-	public Iterable<SkillBean> getLike(@RequestParam(required = true) String id) {
-		return repo.findAllLike(id);
+	public Iterable<SkillBean> getLike(@RequestParam(required = true) String name) {
+		return repo.findByNameLike(name);
 	}
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		repo.deleteById(id);
 	}
+	
+	@GetMapping("/name/{name}")
+	public SkillBean getByName(@PathVariable(required = true) String name) {
+		return repo.findOneByName(name);
+	}
+	
+	@GetMapping("exists/name/{name}")
+	public boolean getExistsByName(@PathVariable(required = true) String name) {
+		return repo.existsByName(name);
+	}
+
 }

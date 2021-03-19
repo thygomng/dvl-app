@@ -89,7 +89,7 @@ this.state = {
     </div>
     <div class="footer-copyright">
         <div class="container">
-            dvl-core.it
+            Thiago Rangel
         </div>
     </div>
 </footer>
